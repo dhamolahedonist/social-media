@@ -86,6 +86,6 @@ app.post('/api/register-account', async (request, response) => {
     })
 
 })
-const   port = process.env.PORT || 3000
+const   port = process.env.PORT ||3000
 console.log(`everything go dy alright laslas ${port}`)
 app.listen(port)

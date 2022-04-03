@@ -3,11 +3,11 @@ const mysql = require('mysql2');
 const DB = {
     init() {
         return mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: '',
+            host: 'db4free.net',
+            user: 'social_influenza',
+            password: 'Passme@123',
             port: '3306',
-            database: 'socialmedia' 
+            database: 'social_influenza' 
         })
     },
 
@@ -27,7 +27,7 @@ const DB = {
 
     async emailAlreadyExist(email) {
         const value = await DB.init().promise().query(`select email from users where email = '${email}'`)
-        value[0].length > 0
+        return value[0].length > 0
     },
 
     async phoneAlreadyExist(phone) {
