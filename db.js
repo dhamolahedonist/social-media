@@ -3,11 +3,17 @@ const mysql = require('mysql2');
 const DB = {
     init() {
         return mysql.createConnection({
-            host: 'db4free.net',
-            user: 'social_influenza',
-            password: 'Passme@123',
+            host: 'localhost',
+            user: 'root',
+            password: '',
             port: '3306',
-            database: 'social_influenza' 
+            database: 'socialmedia' 
+            // mysql.createConnection({
+            // host: 'db4free.net',
+            // user: 'social_influenza',
+            // password: 'Passme@123',
+            // port: '3306',
+            // database: 'social_influenza' 
         })
     },
 

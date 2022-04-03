@@ -1,9 +1,12 @@
+const bcrypt = require('bcryptjs');
 const express = require('express');
+var cors = require('cors')
 const Joi = require('joi');
 const db = require('./db');
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 app.get('/', (request, response) => {
     return response.json({
@@ -11,7 +14,7 @@ app.get('/', (request, response) => {
         message: 'User registered successfully',
         data: []
     })
-})
+});
 
 app.get('/api/get-user-details', async (request, response) => {
     const userDetails = await db.get()
@@ -20,9 +23,10 @@ app.get('/api/get-user-details', async (request, response) => {
         message: 'User registered successfully',
         data: userDetails
     })
-})
+});
 
 app.post('/api/register-account', async (request, response) => {
+    
     const schema = Joi.object({
         first_name: Joi.string().required(),
         last_name: Joi.string().required(),
@@ -42,6 +46,18 @@ app.post('/api/register-account', async (request, response) => {
             data: null
         }, 400)
     }
+
+    let hash = '';
+    try{
+        hash = await bcrypt.hash(request.body.password, 10);
+    } catch(e) {
+        return response.json ({
+            status: 'Failed',
+            message: 'cannot encrypt password',
+            data: null
+        }, 400)
+    }
+
 
     const phoneNumberExist = await db.phoneAlreadyExist(request.body.phone)
     const emailAddressExist = await db.emailAlreadyExist(request.body.email)
@@ -63,7 +79,7 @@ app.post('/api/register-account', async (request, response) => {
         }, 400)
     }
     if(twitterHandleExist) {
-        return response.json ({
+        return response.json({
             status: 'failed',
             message: 'Twitter handle already exist',
             data: null
@@ -71,13 +87,14 @@ app.post('/api/register-account', async (request, response) => {
     }
 
       if(instagramHandleExist) {
-        return response.json ({
+        return response.json({
             status: 'failed',
             message: 'Instagram handle already exist',
             data: null
         }, 400)
     }
-    db.create(request.body)
+    request.body.password = hash;
+    db.create(request.body);
 
     return response.json({
         status: 'successful',
@@ -85,7 +102,8 @@ app.post('/api/register-account', async (request, response) => {
         data: null
     })
 
-})
-const   port = process.env.PORT ||3000
+});
+
+const   port = process.env.PORT || 3000
 console.log(`everything go dy alright laslas ${port}`)
 app.listen(port)
