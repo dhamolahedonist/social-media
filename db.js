@@ -27,22 +27,30 @@ const DB = {
 
     async emailAlreadyExist(email) {
         const value = await DB.init().promise().query(`select email from users where email = '${email}'`)
-        return value[0].length > 0
+        if(value[0].length > 0){
+            throw new Error('Email already exists')
+        }
     },
 
     async phoneAlreadyExist(phone) {
         const value = await DB.init().promise().query(`select phone from users where phone = '${phone}'`)
-        return value[0].length > 0
+        if(value[0].length > 0){
+            throw new Error('Phone number already exists')
+        }
     },
 
     async twitterHandleAlreadyExist(twitter_handle) {
         const value = await DB.init().promise().query(`select twitter_handle from users where twitter_handle = '${twitter_handle}'`)
-        return value[0].length > 0
+       if(value[0].length > 0){
+            throw new Error('Twitter handle already exists')
+        }
     },
 
      async instagramHandleAlreadyExist(instagram_handle) {
         const value = await DB.init().promise().query(`select instagram_handle from users where instagram_handle = '${instagram_handle}'`)
-        return value[0].length > 0
+        if(value[0].length > 0){
+            throw new Error('Instagram handle already exists')
+        }
      }    
 
 }
